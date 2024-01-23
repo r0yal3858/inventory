@@ -1,11 +1,11 @@
 import emailjs from "@emailjs/browser";
 
-const sendEmail = async (data) => {
+const sendEmail = async (data, email) => {
   await emailjs.send(
     import.meta.env.VITE_EMAILJS_SERVICEID,
     import.meta.env.VITE_EMAILJS_TEMPLATEID,
     {
-      reply_to: "bhanuroyal3858@gmail.com",
+      reply_to: email,
       inventory: data,
     },
     import.meta.env.VITE_EMAILJS_PUBLICKEY

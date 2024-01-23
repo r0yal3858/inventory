@@ -1,15 +1,39 @@
 .itemGroup {
-  margin: 10px;
-  padding: 20px 50px;
+  width: 80%;
+  margin: auto;
 }
 
 .itemGroup .itemList {
   display: grid;
+  width: 100%;
   grid-template-columns: auto auto auto;
-  column-gap: 30px;
+  column-gap: 40px;
+  row-gap: 30px;
+}
+
+.item {
+  width: 100%;
+  background-color: white;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 .buttonGroup {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  font-weight: bolder;
+  font-size: x-large;
+}
+
+.emailInput {
+  display: block;
+  height: 40px;
+  width: 200px;
+  margin: 15px auto;
+  padding: 5px 20px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 5px;
 }
