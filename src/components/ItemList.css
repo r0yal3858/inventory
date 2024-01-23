@@ -1,0 +1,15 @@
+.itemGroup {
+  margin: 10px;
+  padding: 20px 50px;
+}
+
+.itemGroup .itemList {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 30px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-around;
+}
