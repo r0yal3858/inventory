@@ -37,3 +37,68 @@
   border-right: 0px;
   border-radius: 5px;
 }
+
+.quantityInput {
+  text-align: center;
+  background-color: #242424;
+}
+
+.searchBar {
+  display: block;
+  text-align: center;
+  width: 70%;
+  margin: 15px auto;
+  padding: 5px 20px;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-radius: 5px;
+  height: 40px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-device-width: 480px) {
+  body,
+  #root,
+  .wrapping {
+    width: 100%;
+  }
+
+  .itemGroup .itemList {
+    width: 100%;
+    display: block;
+  }
+
+  .item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .item h2 {
+    font-size: large;
+  }
+  .buttonGroup {
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+    font-weight: bolder;
+    align-items: center;
+  }
+  .item button,
+  .quantityInput {
+    background-color: #242424;
+    height: 30px;
+    width: 30px;
+    padding: 0px;
+  }
+  .quantityInput {
+    pointer-events: none;
+  }
+}

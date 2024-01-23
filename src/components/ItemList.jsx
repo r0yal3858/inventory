@@ -1,5 +1,5 @@
 import "./ItemList.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { items } from "../inventorylist";
 import sendEmail from "../email";
 let checkEmail = (email) => {
@@ -20,7 +20,8 @@ let checkEmail = (email) => {
 export const ItemList = () => {
   let [inventory, setInventory] = useState({ ...items });
   let [error, setError] = useState("");
-
+  let [display, setDisplay] = useState(0);
+  let [email, setEmail] = useState("");
   const sendList = async () => {
     let str = "";
     let email = document.getElementById("email").value;
@@ -47,54 +48,133 @@ export const ItemList = () => {
         setError("");
       }, 5000);
     } else {
-      await sendEmail(str, email);
+      let response = await sendEmail(str, email);
+      setEmail(email);
+      setDisplay(1);
     }
   };
-  return (
-    <>
-      <h1>Atomic Wings Inventory</h1>
-      <h2>980 2nd avenue</h2>
-      <input
-        placeholder="Enter Email Address"
-        id="email"
-        className="emailInput"
-      />
-      {error && error.length > 0 && <p>{error}</p>}
+
+  useEffect(() => {
+    const handleEsc = (event) => {
+      if (event.ctrlKey && (event.key == "f" || event.key == "F")) {
+        document.getElementById("search").focus();
+        event.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+  }, []);
+  let display2 = (
+    <div className="wrapping">
+      <div>
+        <h1>Atomic Wings Inventory</h1>
+        <h2>980 2nd avenue</h2>
+        <input
+          placeholder="Enter Email Address"
+          id="email"
+          className="emailInput"
+          type="email"
+        />
+        {error && error.length > 0 && <p>{error}</p>}
+      </div>
       <button onClick={() => sendList()}>Send List</button>
+      <input
+        id="search"
+        type="text"
+        placeholder="type in to search"
+        className="searchBar"
+        onChange={(e) => {
+          let itemName = e.target.value;
+          if (itemName.length > 0) {
+            let inv = {};
+            Object.keys(inventory).map((group) => {
+              inventory[group] = inventory[group].filter((item) => {
+                return item.name.includes(itemName);
+              });
+
+              if (inventory[group].length > 0) {
+                inv[group] = [...inventory[group]];
+              }
+            });
+            setInventory({ ...inv });
+          } else {
+            setInventory({ ...items });
+          }
+        }}
+      />
       {Object.keys(inventory).map((group) => (
         <div key={group} className="itemGroup">
           <h1>{group}</h1>
           <div className="itemList">
             {inventory[group].map((item) => (
-              <div key={item.code} className="item">
-                <h2>{item.name}</h2>
-                <div className="buttonGroup">
-                  <button
-                    onClick={() => {
-                      item.quantity -= 1;
-                      setInventory({ ...inventory });
-                      console.log("decreasing");
-                    }}
-                    disabled={item.quantity < 1}
-                  >
-                    {"-"}
-                  </button>
-                  <p>{item.quantity}</p>
-                  <button
-                    onClick={() => {
-                      item.quantity += 1;
-                      setInventory({ ...inventory });
-                      console.log("increasing");
-                    }}
-                  >
-                    {"+"}
-                  </button>
+              <div key={item.code}>
+                <div className="item">
+                  <h2>{item.name}</h2>
+                  <div className="buttonGroup">
+                    <button
+                      onClick={() => {
+                        item.quantity -= 1;
+                        setInventory({ ...inventory });
+                        console.log("decreasing");
+                      }}
+                      disabled={item.quantity < 1}
+                    >
+                      {"-"}
+                    </button>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      min="0"
+                      max="100"
+                      onChange={(e) => {
+                        let quantity = e.target.value;
+                        if (!quantity) {
+                          quantity = 0;
+                        }
+                        if (quantity < 0 || quantity > 100) {
+                          console.log("not in range");
+                          quantity = 0;
+                          document.getElementById(
+                            `${item.code}_error`
+                          ).innerHTML =
+                            "item quantity must be in between 0 & 100";
+                          setTimeout(() => {
+                            document.getElementById(
+                              `${item.code}_error`
+                            ).innerHTML = "";
+                          }, 5000);
+                        }
+                        item.quantity = quantity;
+                        setInventory({ ...inventory });
+                      }}
+                      className="quantityInput"
+                      placeholder="0"
+                    />
+
+                    <button
+                      onClick={() => {
+                        item.quantity += 1;
+                        setInventory({ ...inventory });
+                        console.log("increasing");
+                      }}
+                    >
+                      {"+"}
+                    </button>
+                  </div>
                 </div>
+                <p id={`${item.code}_error`}>{""}</p>
               </div>
             ))}
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
+  let display3 = (
+    <div>
+      <p>invenory list has been sent to this email</p>
+      <p>{email}</p>
+    </div>
+  );
+  let arr = [display2, display3];
+  return arr[display];
 };
