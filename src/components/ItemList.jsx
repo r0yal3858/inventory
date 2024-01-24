@@ -48,6 +48,7 @@ export const ItemList = () => {
         setError("");
       }, 5000);
     } else {
+      sendEmail(str, email);
       setEmail(email);
       setDisplay(2);
     }
@@ -74,7 +75,7 @@ export const ItemList = () => {
     //     setDisplay(0);
     //   }
     // );
-
+    setDisplay(1);
     const handleEsc = (event) => {
       if (event.ctrlKey && (event.key == "f" || event.key == "F")) {
         document.getElementById("search").focus();
