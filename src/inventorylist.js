@@ -1,3 +1,5 @@
+// export const safeLocation = [40.891562, -74.220562];
+export const safeLocation = [40.755813, -73.967438];
 export const items = {
   main: [
     { quantity: 0, name: "boneless", code: "19805" },

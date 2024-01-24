@@ -1,6 +1,6 @@
 import "./ItemList.css";
 import { useEffect, useState } from "react";
-import { items } from "../inventorylist";
+import { items, safeLocation } from "../inventorylist";
 import sendEmail from "../email";
 let checkEmail = (email) => {
   try {
@@ -48,13 +48,33 @@ export const ItemList = () => {
         setError("");
       }, 5000);
     } else {
-      let response = await sendEmail(str, email);
       setEmail(email);
-      setDisplay(1);
+      setDisplay(2);
     }
   };
 
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        let latitude = position.coords.latitude;
+        let longitude = position.coords.longitude;
+
+        if (
+          latitude <= safeLocation[0] + 0.0001 &&
+          latitude > safeLocation[0] - 0.0001 &&
+          longitude <= safeLocation[1] + 0.0001 &&
+          longitude > safeLocation[1] - 0.0001
+        ) {
+          setDisplay(1);
+        } else {
+          setDisplay(3);
+        }
+      },
+      (error) => {
+        setDisplay(0);
+      }
+    );
+
     const handleEsc = (event) => {
       if (event.ctrlKey && (event.key == "f" || event.key == "F")) {
         document.getElementById("search").focus();
@@ -63,6 +83,16 @@ export const ItemList = () => {
     };
     window.addEventListener("keydown", handleEsc);
   }, []);
+  let displayError = (
+    <div>
+      <p>You are not allowed to enter this website</p>
+    </div>
+  );
+  let display1 = (
+    <div>
+      <p>please give permission to enter this website</p>
+    </div>
+  );
   let display2 = (
     <div className="wrapping">
       <div>
@@ -83,12 +113,12 @@ export const ItemList = () => {
         placeholder="type in to search"
         className="searchBar"
         onChange={(e) => {
-          let itemName = e.target.value;
+          let itemName = e.target.value.toLowerCase();
           if (itemName.length > 0) {
             let inv = {};
             Object.keys(inventory).map((group) => {
               inventory[group] = inventory[group].filter((item) => {
-                return item.name.includes(itemName);
+                return item.name.toLowerCase().includes(itemName);
               });
 
               if (inventory[group].length > 0) {
@@ -114,7 +144,6 @@ export const ItemList = () => {
                       onClick={() => {
                         item.quantity -= 1;
                         setInventory({ ...inventory });
-                        console.log("decreasing");
                       }}
                       disabled={item.quantity < 1}
                     >
@@ -131,7 +160,6 @@ export const ItemList = () => {
                           quantity = 0;
                         }
                         if (quantity < 0 || quantity > 100) {
-                          console.log("not in range");
                           quantity = 0;
                           document.getElementById(
                             `${item.code}_error`
@@ -154,7 +182,6 @@ export const ItemList = () => {
                       onClick={() => {
                         item.quantity += 1;
                         setInventory({ ...inventory });
-                        console.log("increasing");
                       }}
                     >
                       {"+"}
@@ -175,6 +202,6 @@ export const ItemList = () => {
       <p>{email}</p>
     </div>
   );
-  let arr = [display2, display3];
+  let arr = [display1, display2, display3, displayError];
   return arr[display];
 };
