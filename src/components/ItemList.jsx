@@ -58,12 +58,12 @@ export const ItemList = () => {
       (position) => {
         let latitude = position.coords.latitude;
         let longitude = position.coords.longitude;
-
+        console.log(latitude, longitude);
         if (
-          latitude <= safeLocation[0] + 0.0001 &&
-          latitude > safeLocation[0] - 0.0001 &&
-          longitude <= safeLocation[1] + 0.0001 &&
-          longitude > safeLocation[1] - 0.0001
+          latitude <= safeLocation[0] + 0.001 &&
+          latitude > safeLocation[0] - 0.001 &&
+          longitude <= safeLocation[1] + 0.001 &&
+          longitude > safeLocation[1] - 0.001
         ) {
           setDisplay(1);
         } else {
