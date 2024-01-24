@@ -54,26 +54,26 @@ export const ItemList = () => {
   };
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        let latitude = position.coords.latitude;
-        let longitude = position.coords.longitude;
-        console.log(latitude, longitude);
-        if (
-          latitude <= safeLocation[0] + 0.001 &&
-          latitude > safeLocation[0] - 0.001 &&
-          longitude <= safeLocation[1] + 0.001 &&
-          longitude > safeLocation[1] - 0.001
-        ) {
-          setDisplay(1);
-        } else {
-          setDisplay(3);
-        }
-      },
-      (error) => {
-        setDisplay(0);
-      }
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     let latitude = position.coords.latitude;
+    //     let longitude = position.coords.longitude;
+    //     console.log(latitude, longitude);
+    //     if (
+    //       latitude <= safeLocation[0] + 0.01 &&
+    //       latitude > safeLocation[0] - 0.01 &&
+    //       longitude <= safeLocation[1] + 0.01 &&
+    //       longitude > safeLocation[1] - 0.01
+    //     ) {
+    //       setDisplay(1);
+    //     } else {
+    //       setDisplay(3);
+    //     }
+    //   },
+    //   (error) => {
+    //     setDisplay(0);
+    //   }
+    // );
 
     const handleEsc = (event) => {
       if (event.ctrlKey && (event.key == "f" || event.key == "F")) {
